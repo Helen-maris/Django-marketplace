@@ -1,0 +1,18 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    <h1>{{ object.name }}</h1>
+    <p>{{ object.description }}</p>
+    <p>{{ object.price }}</p>
+
+    {% for name in object.picture.all %}
+        <li>{{name}}</li>
+    {% endfor %}
+
+    {% load thumbnail %}
+    {% for pic in picture %}
+        {% thumbnail pic.image "500x500" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        {% endthumbnail %}
+    {% endfor %}
+{% endblock %}
