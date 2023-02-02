@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HomePage</title>
+    {% load static %}
+    {% load thumbnail %}
+    {% load main_extras %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <div class="container-fluid">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">{{ "Привет, мир!"|reverse_text }} </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'index' %}">HomePage</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'ad-list' %}">Ads</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item px-2">
+          <button type="button" class="btn btn-primary">
+            Notifications
+            <span class="badge badge-secondary" >{% random_number %}</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <p class="navbar-text">{{ user.username }} </p>
+        </li>
+        <li class="nav-item px-2">
+          {% thumbnail user.seller.image "50x50" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+          {% endthumbnail %}
+        </li>
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'logout' %}">Log Out</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'login' %}">Login</a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </div>
+  </nav>
+{% include "main/includes/header.html" %}
+
+<div class="container text-black">
+  {% block content %}
+  {% endblock %}
+  {{ flatpage.content }}
+</div>
+
+<p>&nbsp;</p>
+{% include "main/includes/footer.html" %}
+
+</body>
+</html>

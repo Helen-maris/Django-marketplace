@@ -1,0 +1,105 @@
+{% extends "main/base.html" %}
+
+{% load static %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Название объявления</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ad in ad_list %}
+          <tr>
+            <td><a href="{% url 'ad-detail' ad.pk %}">{{ ad.name }}</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-4">
+      <b>Поиск по объявлениям</b>
+      <div class="input-group mb-3">
+        <input class="form-control" type="text" id="id_message_send_input" placeholder="Название объявления"/>
+        <div class="input-group-append">
+          <button class="btn btn-outline-primary" type="submit" id="id_message_send_button">Поиск</button>
+        </div>
+        <div class="container-fluid bg-light">
+	        <a href="" id="id_search_result"></a>
+	    </div>
+	    <script src="{% static 'js/search.js' %}"></script>
+	  </div>
+      <b>Список тэгов</b>
+        <div class="container text-black">
+        {% for tag in tags %}
+          <a href="?tag={{tag}}" class="badge badge-primary">{{tag}}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav aria-label="Page navigation ">
+  {% if request.GET.tag == null %}
+  <ul class="pagination">
+  {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+      {% if num == page_obj.number %}
+        <li class="page-item active" aria-current="num">
+          <span class="page-link">{{num}}</span>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{num}}">{{num}}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+  {% else %}
+  <ul class="pagination">
+  {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?tag={{request.GET.tag}}&page={{ page_obj.previous_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+      {% if num == page_obj.number %}
+        <li class="page-item active" aria-current="num">
+          <span class="page-link">{{num}}</span>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?tag={{request.GET.tag}}&page={{num}}">{{num}}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?tag={{request.GET.tag}}&page={{ page_obj.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+  {% endif %}
+</nav>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-8">
+    <h1>{{ object.name }}</h1>
+    <p>{{ object.description }}</p>
+    <p>{{ object.price }}</p>
+    {% for name in object.tag.all %}
+      <li>{{name}}</li>
+    {% endfor %}
+    {% load thumbnail %}
+    {% for pic in picture %}
+      {% thumbnail pic.image "500x500" as im %}
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+      {% endthumbnail %}
+    {% endfor %}
+    </div>
+    <div class="col-4">
+    {% if user.pk == object.seller.user_id %}
+      <button type="button" class="btn btn-outline-secondary">
+        <a href="{% url 'ad-update' object.pk %}">Редактировать</a>
+      </button>
+    {% endif %}
+    </div>
+  </div>
+{% endblock %}
